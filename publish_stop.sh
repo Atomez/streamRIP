@@ -32,8 +32,14 @@ if [[ -f $onpidfi ]]; then
 fi
 
 errcho "[$me] Starting offline stream..."
+if [ &backuptype = "stream" ] then 
+ffmpeg -loglevel warning -i $rtmpB -c copy -f mpegts pipe:1 > $pfi &
+offpid=$!
+fi
+if [ &backuptype = "video" ] then 
 ffmpeg -loglevel warning -stream_loop -1 -re -i $offfi -c copy -f mpegts pipe:1 > $pfi &
 offpid=$!
+fi
 errcho "[$me] Offline stream pid $offpid"
 echo $offpid > $offpidfi
 wait $offpid
